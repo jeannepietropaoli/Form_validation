@@ -1,7 +1,5 @@
 const inputs = Array.from(document.querySelectorAll('input'));
 const submitFormBtn = document.querySelector('button[id = "submit"]');
-const zipCodeInput = document.querySelector('#zipCode');
-const countryInput = document.querySelector('#country');
 const defaultCountry = 'France';
 
 inputs.push(document.querySelector('select'));
@@ -26,18 +24,28 @@ const inputsErrorMessages = {
     passwordConfirmation : 'does not match your inital password'
 }
 
-const location = () => {
+const area = (() => {
+    const zipCodeInput = document.querySelector('#zipCode');
+    const countryInput = document.querySelector('#country');
+    const inputs = [zipCodeInput, countryInput];
     const country = () => document.querySelector('#country').value;
-}
+    const isZipCodeCorrectWithCountry = () => countryZipCodePattern[country()].test(zipCodeInput.value);
+    const alertZipCodeInvalid = () => {
+        zipCodeInput.classList.toggle('invalid');
+        zipCodeInput.setCustomValidity(inputsErrorMessages[zipCodeInput.id])
+    }
+    const updateCountryErrorMessage = () => {
+        inputsErrorMessages['zipCode'] = `Zip code example ${countryZipCodeExample[countryInput.value]}`;
+        zipCodeInput.placeholder = (inputsErrorMessages['zipCode']);
+    }
 
-function identifyTheCountry() {
-    return document.querySelector('#country').value;
-}
-
-function checkIfZipCodeCorrectWithCountry() {
-    let country = identifyTheCountry();
-    return countryZipCodePattern[country].test(zipCodeInput.value)
-}
+    return {
+        isZipCodeCorrectWithCountry,
+        alertZipCodeInvalid,
+        updateCountryErrorMessage,
+        inputs
+    }
+})()
 
 function alertInputIsValid(input) {
     input.style.border = '1px solid green';
@@ -55,38 +63,21 @@ function isInputRelatedToZipCode(input) {
     return input.id === 'country' || input.id === 'zipCode';
 }
 
-function verifyZipCode() {
-    if (countryInput.value) {
-        return checkIfZipCodeCorrectWithCountry();
-    }
-    else {
-        return false;
-    }
-}
-
-function alertZipCodeInvalid() {
-        zipCodeInput.classList.toggle('invalid');
-        zipCodeInput.setCustomValidity(inputsErrorMessages[zipCodeInput.id])
-}
-
 function isInputInvalid(input) {
         return input.validity.valueMissing || input.validity.typeMismatch || input.validity.patternMismatch;
-}
-
-function updateCountryErrorMessage() {
-    inputsErrorMessages['zipCode'] = `Zip code example ${countryZipCodeExample[countryInput.value]}`;
-    zipCodeInput.placeholder = (inputsErrorMessages['zipCode']);
 }
 
 inputs.forEach(input => {
     input.addEventListener('input', () => {
         if (isInputRelatedToZipCode(input)) {
-            updateCountryErrorMessage();
-            if (verifyZipCode()) {
-                alertInputIsValid(input);
+            if (area.isZipCodeCorrectWithCountry()) {
+                area.inputs.forEach(input => {
+                    alertInputIsValid(input)
+                })
             }
             else {
-                alertZipCodeInvalid();
+                area.updateCountryErrorMessage();
+                area.alertZipCodeInvalid();
             }
         }
         else if (isInputInvalid(input)) {
