@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation example</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <form action="">
+        <label for="firstName">First name
+            <input id="firstName" type="text" placeholder=" " required>
+            <span class="required"></span>
+        </label>
+
+        <label for="lasttName">Last name
+            <input id="lastName" type="text" placeholder=" " required>
+            <span class="required"></span>
+        </label>
+
+        <label for="email">E-mail
+            <input id="email" type="email" placeholder=" " pattern="[a-zA-Z0-9.]+@[A-Za-z]+.(com|fr)" required>
+            <span class="required"></span>
+        </label>
+
+        <label for="country">Country
+            <select name="country" id="country" placeholder=" ">
+                <option value="France">France</option>
+                <option value="Canada">Canada</option>
+            </select>
+        </label>
+
+        <label for="zipCode">Zip Code
+            <input id="zipCode" type="text" placeholder=" " required>
+            <span class="required"></span>
+        </label>
+
+        <label for="password">Password
+            <input id="password" type="text" placeholder=" "  required>
+            <span class="required"></span>
+        </label>
+
+        <label for="passwordConfirmation">Confirm password
+            <input id="passwordConfirmation" type="text" placeholder=" " pattern="[]{8,}" required>
+            <span class="required"></span>
+        </label>
+
+        <button id="submit">Validate</button>
+    </form>
+</body>
+</html>
