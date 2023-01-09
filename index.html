@@ -38,12 +38,12 @@
         </label>
 
         <label for="password">Password
-            <input id="password" type="text" placeholder=" "  required>
+            <input id="password" type="text" placeholder=" " pattern= "^(?=.*[~`! -@#$%^&*()_+={[};'<,>])(?=.*\w)[\w~`! -@#$%^&*()_+={[};'<,>]{3,}$" required>
             <span class="required"></span>
         </label>
 
         <label for="passwordConfirmation">Confirm password
-            <input id="passwordConfirmation" type="text" placeholder=" " pattern="[]{8,}" required>
+            <input id="passwordConfirmation" type="text" placeholder=" " required>
             <span class="required"></span>
         </label>
 

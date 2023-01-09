@@ -47,6 +47,27 @@ const area = (() => {
     }
 })()
 
+const password = (() => {
+    const mainPassword = document.querySelector('#password');
+    const passwordConfirmation = document.querySelector('#passwordConfirmation');
+    const inputs = [mainPassword, passwordConfirmation];
+    const isPasswordConfirmationCorrect = () => mainPassword.value === passwordConfirmation.value;
+    const alertConfirmationPasswordIsInvalid = () => {
+        passwordConfirmation.classList.toggle('invalid');
+        passwordConfirmation.setCustomValidity(inputsErrorMessages[passwordConfirmation.id])
+    }
+
+    return {
+        inputs,
+        isPasswordConfirmationCorrect,
+        alertConfirmationPasswordIsInvalid
+    }
+})()
+
+function isInputRelatedToPassword(input) {
+    return input.id === 'password'|| input.id === 'passwordConfirmation';
+}
+
 function alertInputIsValid(input) {
     input.style.border = '1px solid green';
     input.setCustomValidity('');
@@ -78,6 +99,16 @@ inputs.forEach(input => {
             else {
                 area.updateCountryErrorMessage();
                 area.alertZipCodeInvalid();
+            }
+        }
+        else if (isInputRelatedToPassword(input)) {
+            if (password.isPasswordConfirmationCorrect()) {                
+                password.inputs.forEach(input => {
+                    alertInputIsValid(input)
+                })
+            }
+            else {
+                password.alertConfirmationPasswordIsInvalid()
             }
         }
         else if (isInputInvalid(input)) {
