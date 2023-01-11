@@ -5,7 +5,7 @@ const defaultCountry = 'France';
 inputs.push(document.querySelector('select'));
 
 const countryZipCodePattern = {
-    France : /^([0-9][0-9])[^96|97|98|99|00][0-9]{3}$/,
+    France : /^(0[1-9]|(?!99|98|97|96)[1-9][0-9])[0-9]{3}$/,
     Canada : /^[A-Z][1-9][A-Z]-[1-9][A-Z][1-9]$/
 }
 
