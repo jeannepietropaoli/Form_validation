@@ -5,8 +5,8 @@ const defaultCountry = 'France';
 inputs.push(document.querySelector('select'));
 
 const countryZipCodePattern = {
-    France : /([0-9][0-9])[^96|97|98|99|00][0-9]{3}/,
-    Canada : /[A-Z][1-9][A-Z]-[1-9][A-Z][1-9]/
+    France : /^([0-9][0-9])[^96|97|98|99|00][0-9]{3}$/,
+    Canada : /^[A-Z][1-9][A-Z]-[1-9][A-Z][1-9]$/
 }
 
 const countryZipCodeExample = {
@@ -27,23 +27,23 @@ const inputsErrorMessages = {
 const area = (() => {
     const zipCodeInput = document.querySelector('#zipCode');
     const countryInput = document.querySelector('#country');
-    const inputs = [zipCodeInput, countryInput];
     const country = () => document.querySelector('#country').value;
     const isZipCodeCorrectWithCountry = () => countryZipCodePattern[country()].test(zipCodeInput.value);
-    const alertZipCodeInvalid = () => {
-        zipCodeInput.classList.toggle('invalid');
-        zipCodeInput.setCustomValidity(inputsErrorMessages[zipCodeInput.id])
-    }
     const updateCountryErrorMessage = () => {
         inputsErrorMessages['zipCode'] = `Zip code example ${countryZipCodeExample[countryInput.value]}`;
         zipCodeInput.placeholder = (inputsErrorMessages['zipCode']);
     }
-
+    const manageAreaData = () => {
+        if (isZipCodeCorrectWithCountry()) {
+            alertInputIsValid(zipCodeInput)
+        }
+        else {
+            updateCountryErrorMessage();
+            alertInputIsInvalid(zipCodeInput);
+        }
+    }
     return {
-        isZipCodeCorrectWithCountry,
-        alertZipCodeInvalid,
-        updateCountryErrorMessage,
-        inputs
+        manageAreaData
     }
 })()
 
@@ -52,25 +52,43 @@ const password = (() => {
     const passwordConfirmation = document.querySelector('#passwordConfirmation');
     const inputs = [mainPassword, passwordConfirmation];
     const isPasswordConfirmationCorrect = () => mainPassword.value === passwordConfirmation.value;
-    const alertConfirmationPasswordIsInvalid = () => {
-        passwordConfirmation.classList.toggle('invalid');
-        passwordConfirmation.setCustomValidity(inputsErrorMessages[passwordConfirmation.id])
+    const manageMainPasswordData = () => {
+        if (isInputInvalid(mainPassword)) {
+            alertInputIsInvalid(mainPassword)
+        }
+        else {
+            alertInputIsValid(mainPassword);
+            isPasswordConfirmationCorrect() ? alertInputIsValid(passwordConfirmation) : alertInputIsInvalid(passwordConfirmation)
+        } 
     }
-
+    const manageConfirmationPasswordData = () => {
+        if (isPasswordConfirmationCorrect()) {                
+            alertInputIsValid(passwordConfirmation);
+        }
+        else {
+            alertInputIsInvalid(passwordConfirmation);
+        }
+    }
+    const managePasswordData = (input) => {
+        if (input === mainPassword) {
+            manageMainPasswordData();
+        }
+        else {
+            manageConfirmationPasswordData()
+        }
+    }
     return {
-        inputs,
-        isPasswordConfirmationCorrect,
-        alertConfirmationPasswordIsInvalid
+        managePasswordData
     }
 })()
-
-function isInputRelatedToPassword(input) {
-    return input.id === 'password'|| input.id === 'passwordConfirmation';
-}
 
 function alertInputIsValid(input) {
     input.style.border = '1px solid green';
     input.setCustomValidity('');
+}
+
+function isInputInvalid(input) {
+    return input.validity.valueMissing || input.validity.typeMismatch || input.validity.patternMismatch;
 }
 
 function alertInputIsInvalid(input) {        
@@ -80,36 +98,21 @@ function alertInputIsInvalid(input) {
     input.placeholder = inputsErrorMessages[input.id];
 }
 
-function isInputRelatedToZipCode(input) {
+function isInputRelatedToArea(input) {
     return input.id === 'country' || input.id === 'zipCode';
 }
 
-function isInputInvalid(input) {
-        return input.validity.valueMissing || input.validity.typeMismatch || input.validity.patternMismatch;
+function isInputRelatedToPassword(input) {
+    return input.id === 'password'|| input.id === 'passwordConfirmation';
 }
 
 inputs.forEach(input => {
     input.addEventListener('input', () => {
-        if (isInputRelatedToZipCode(input)) {
-            if (area.isZipCodeCorrectWithCountry()) {
-                area.inputs.forEach(input => {
-                    alertInputIsValid(input)
-                })
-            }
-            else {
-                area.updateCountryErrorMessage();
-                area.alertZipCodeInvalid();
-            }
+        if (isInputRelatedToArea(input)) {
+            area.manageAreaData();
         }
         else if (isInputRelatedToPassword(input)) {
-            if (password.isPasswordConfirmationCorrect()) {                
-                password.inputs.forEach(input => {
-                    alertInputIsValid(input)
-                })
-            }
-            else {
-                password.alertConfirmationPasswordIsInvalid()
-            }
+            password.managePasswordData(input)
         }
         else if (isInputInvalid(input)) {
             alertInputIsInvalid(input);

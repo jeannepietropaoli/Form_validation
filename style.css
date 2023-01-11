@@ -52,3 +52,7 @@ select {
 ::placeholder {
     font-size: 10px;
 }
+
+#country {
+    border: 1px solid green;
+}
