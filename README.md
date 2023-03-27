@@ -6,13 +6,11 @@ https://jeannepietropaoli.github.io/Form_validation/
 
 ## Description
 
-Project inside the Odin Project's Foundations course.
+Project inside the Odin Project's Full Stack JavaScript course.
 
 To learn more about The Odin Project : https://www.theodinproject.com/
 
-To learn more about the specific Foundations course : https://www.theodinproject.com/paths/foundations/courses/foundations
-
-The goal of this project is to create a form which collects Email, Country, Zip Code, Password and Password Confirmation fields.
+The goal of this project is to create a simple form which collects Email, Country, Zip Code, Password and Password Confirmation fields to practice form validation in JS and CSS.
 
 ## Skills to practice
 
@@ -27,7 +25,7 @@ The goal of this project is to create a form which collects Email, Country, Zip 
 Simple form with :
 - Simple visible cues (🗸 / x) for the user to know if the field is correctly completed
 - regex pattern validation for e-mail and password
-- ZIP code validation depending on the selected country
+- regex pattern ZIP code validation depending on the selected country
 - Passwords-match checking
 - Custom error messages to guide the user to correctly complete the form
 - Organized code to easily add new features to the form (new countries and their ZIP code pattern, new section in the form and their error message...)
